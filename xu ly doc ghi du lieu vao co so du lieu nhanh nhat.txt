@@ -1,0 +1,54 @@
+class Consumer {
+
+    public Consumer(blockingQueue) {
+        this.blockingQueue = blockingQueue;
+    }
+
+    public void start() {
+        Thread[] threads = new Thread[32];
+        for (int i = 0 ; i < threads.size() ; ++i) {
+            threads[i] = new Thread(this::loop);
+            threads[i].start();
+        }
+    }
+    
+    public loop() {
+        while(true) {
+            List<Record> records = blockingQueue.take();
+            if (records.isEmpty()) {
+                break;
+            }
+            writeToRedis(records);
+        }
+    }
+}
+
+class Produer {
+    public Producer(blockingQueue) {
+        this.blockingQueue = blockingQueue;
+    }
+
+    public void start() {
+        Thread thread = new Thread(this::loop);
+    }
+
+    public void loop() {
+        while(true) {
+            if (blockingQueue.size() >= 100) { // neu van con du lieu trong queu thi tam thoi chua lay tu db voi
+                Thread.sleep(3);
+            }
+            List<Record> records = getRecordsFromOracle();
+            blockingQueue.add(records);
+            if (recoreds.isEmpty()) {
+                break;
+            }
+        }
+    }
+}
+
+if (records.isEmpty()) {
+                for (int i = 0 ; < 31 ; ++i) {
+                    blockingQueue.add(Collections.emptyList());
+                }
+                break;
+}
